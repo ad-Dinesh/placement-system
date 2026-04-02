@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-//  REGISTER
+// ================= REGISTER =================
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
@@ -15,7 +15,7 @@ export const register = async (req, res) => {
 
     const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
-      return res.status(409).json({ message: "User already exists with this email" });
+      return res.status(409).json({ message: "User already exists" });
     }
 
     const allowedRoles = ["student", "recruiter"];
@@ -33,7 +33,9 @@ export const register = async (req, res) => {
       role,
     });
 
-    return res.status(201).json({ message: "User registered successfully" });
+    return res.status(201).json({
+      message: "User registered successfully",
+    });
 
   } catch (error) {
     console.error("Register Error:", error);
@@ -41,7 +43,8 @@ export const register = async (req, res) => {
   }
 };
 
-//  LOGIN
+
+// ================= LOGIN =================
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -63,7 +66,7 @@ export const login = async (req, res) => {
     }
 
     if (role !== user.role) {
-      return res.status(403).json({ message: "Access denied: role mismatch" });
+      return res.status(403).json({ message: "Role mismatch" });
     }
 
     const token = jwt.sign(
@@ -83,7 +86,7 @@ export const login = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({
-        message: `Welcome back, ${user.fullname}!`,
+        message: `Welcome back ${user.fullname}`,
         user: safeUser,
       });
 
@@ -94,8 +97,7 @@ export const login = async (req, res) => {
 };
 
 
-//  LOGOUT
-
+// ================= LOGOUT =================
 export const logout = async (req, res) => {
   try {
     return res
@@ -107,54 +109,64 @@ export const logout = async (req, res) => {
         maxAge: 0,
       })
       .json({ message: "Logged out successfully" });
+
   } catch (error) {
     console.error("Logout Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-//  GET PROFILE
+
+// ================= GET PROFILE =================
 export const getProfile = async (req, res) => {
   try {
-    const userId = req.userId;
-
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(req.userId).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    //updating data
-    user.fullname = fullname,
-    user.email = email,
-    user.phoneNumber = phoneNumber,
-    user.role = role,
-    user.profile.bio = bio,
-    user.profile.skills = skills
-
-
-    await user.save();
-    user = {
-        _id: user._id,
-        fullname: user.fullname,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        role: user.role,
-        profile: user.profile,
-    }
-
-
-    
-
     return res.status(200).json({ user });
-    
 
   } catch (error) {
     console.error("GetProfile Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// ================= UPDATE PROFILE =================
+export const updateProfile = async (req, res) => {
+  try {
+    const { fullname, phoneNumber, bio, skills } = req.body;
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // update fields
+    if (fullname) user.fullname = fullname;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    // ensure profile exists
+    if (!user.profile) user.profile = {};
+
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = skills.split(",");
+
+    await user.save();
+
+    const updatedUser = await User.findById(req.userId).select("-password");
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+
+  } catch (error) {
+    console.error("UpdateProfile Error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
