@@ -2,6 +2,9 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 
 const AuthContext = createContext(null);
 
+// ✅ Use ENV
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 function saveToken(token) {
   try {
     localStorage.setItem("jwt_token", token);
@@ -37,11 +40,9 @@ function isTokenExpired(token) {
   return decoded.exp * 1000 < Date.now();
 }
 
-// ✅ NEW: Safe extraction (important security layer)
 function safeSetUserFromToken(token) {
   const decoded = decodeToken(token);
 
-  // validate required fields
   if (!decoded || !decoded.email || !decoded.sub) {
     removeToken();
     return null;
@@ -73,16 +74,26 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${BASE_URL}/api/v1/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
 
       if (!res.ok) {
         return { success: false, message: data.message || "Login failed." };
+      }
+
+      if (!data.token) {
+        return { success: false, message: "Token not received." };
       }
 
       saveToken(data.token);
@@ -95,23 +106,33 @@ export function AuthProvider({ children }) {
       setUser(userData);
 
       return { success: true };
-    } catch {
+    } catch (err) {
+      console.error("LOGIN ERROR:", err); 
       return { success: false, message: "Network error. Please try again." };
     }
   }, []);
 
   const signup = useCallback(async (name, email, password, role) => {
     try {
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch(`${BASE_URL}/api/v1/auth/signup`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role }),
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
 
       if (!res.ok) {
         return { success: false, message: data.message || "Signup failed." };
+      }
+
+      if (!data.token) {
+        return { success: false, message: "Token not received." };
       }
 
       saveToken(data.token);
@@ -124,7 +145,8 @@ export function AuthProvider({ children }) {
       setUser(userData);
 
       return { success: true };
-    } catch {
+    } catch (err) {
+      console.error("SIGNUP ERROR:", err); 
       return { success: false, message: "Network error. Please try again." };
     }
   }, []);
