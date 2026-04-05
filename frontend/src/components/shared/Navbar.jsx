@@ -4,8 +4,8 @@ import { Briefcase, Bell, Menu, X, ChevronDown, LogOut, LayoutDashboard, FileTex
 import { useAuth } from "../../lib/AuthContext";
 
 const NAV = [
-  { name: "Find Jobs",    path: "/jobs" },
-  { name: "Companies",    path: "/companies" },
+  { name: "Find Jobs", path: "/jobs" },
+  { name: "Companies", path: "/companies" },
   { name: "Applications", path: "/applications" },
 ];
 
@@ -18,27 +18,41 @@ export default function Navbar() {
   const [dropOpen, setDropOpen] = useState(false);
   const dropRef = useRef();
 
+  // ✅ Improved outside click (supports touch)
   useEffect(() => {
     const handler = (e) => {
-      if (!dropRef.current?.contains(e.target)) setDropOpen(false);
+      if (!dropRef.current?.contains(e.target)) {
+        setDropOpen(false);
+      }
     };
+
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
   }, []);
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
+  // ✅ Safe logout
   const handleLogout = () => {
+    setDropOpen(false);
     logout();
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
+
+  // ✅ Safe user fallback
+  const userName = user?.name || "User";
+  const userEmail = user?.email || "";
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-gray-950 border-b border-white/10 flex items-center">
         <div className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
 
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center">
               <Briefcase size={15} className="text-white" />
@@ -48,7 +62,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
             {NAV.map(({ name, path }) => (
               <Link
@@ -65,7 +78,6 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Right side */}
           <div className="flex items-center gap-2">
             {!user ? (
               <>
@@ -91,26 +103,29 @@ export default function Navbar() {
                     className="flex items-center gap-2 px-2 py-1.5 hover:bg-white/5 rounded-lg transition-colors"
                   >
                     <div className="w-7 h-7 bg-violet-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                      {user.name?.[0]?.toUpperCase()}
+                      {userName[0]?.toUpperCase()}
                     </div>
-                    <span className="text-[13px] text-gray-300 hidden sm:block">{user.name}</span>
+                    <span className="text-[13px] text-gray-300 hidden sm:block">{userName}</span>
                     <ChevronDown size={13} className={`text-gray-500 transition-transform ${dropOpen ? "rotate-180" : ""}`} />
                   </button>
 
                   {dropOpen && (
                     <div className="absolute right-0 mt-2 w-52 bg-gray-900 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
                       <div className="px-3 py-2.5 border-b border-white/10">
-                        <p className="text-[13px] font-medium text-white">{user.name}</p>
-                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                        <p className="text-[13px] font-medium text-white">{userName}</p>
+                        <p className="text-xs text-gray-500 truncate">{userEmail}</p>
                       </div>
+
                       <Link to="/dashboard" onClick={() => setDropOpen(false)}
                         className="flex items-center gap-2.5 px-3 py-2 text-[13px] text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
                         <LayoutDashboard size={14} /> Dashboard
                       </Link>
+
                       <Link to="/applications" onClick={() => setDropOpen(false)}
                         className="flex items-center gap-2.5 px-3 py-2 text-[13px] text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
                         <FileText size={14} /> My Applications
                       </Link>
+
                       <div className="border-t border-white/10">
                         <button onClick={handleLogout}
                           className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] text-red-400 hover:bg-red-500/10 transition-colors">
@@ -141,12 +156,6 @@ export default function Navbar() {
               {name}
             </Link>
           ))}
-          {!user && (
-            <div className="pt-3 border-t border-white/10 mt-2 flex flex-col gap-1">
-              <Link to="/login"  className="py-2 text-sm text-gray-400">Log in</Link>
-              <Link to="/signup" className="py-2 text-sm font-semibold text-violet-400">Get started</Link>
-            </div>
-          )}
         </div>
       )}
     </>

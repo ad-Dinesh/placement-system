@@ -1,29 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAuth } from "../../lib/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [form, setForm]       = useState({ email: "", password: "" });
   const [showPw, setShowPw]   = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState("");
 
+  // ✅ NEW: Redirect if already logged in
+  useEffect(() => {
+    if (user) navigate("/dashboard");
+  }, [user, navigate]);
+
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  // ✅ NEW: Email validation
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // ✅ prevent double click
+
     setError("");
-    if (!form.email || !form.password) { setError("Please fill in all fields."); return; }
+
+    const email = form.email.trim().toLowerCase();
+    const password = form.password;
+
+    if (!email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
     setLoading(true);
-    const result = await login(form.email.trim(), form.password);
+
+    const result = await login(email, password);
+
     setLoading(false);
-    if (result.success) navigate("/dashboard");
-    else setError(result.message);
+
+    if (result.success) {
+      navigate("/dashboard");
+    } else {
+      setError(result.message);
+    }
   };
 
   return (
