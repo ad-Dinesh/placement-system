@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 
 const AuthContext = createContext(null);
 
-// ✅ Use ENV
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 function saveToken(token) {
@@ -80,13 +79,7 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({ email, password }),
       });
 
-      
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        data = {};
-      }
+      const data = await res.json();
 
       if (!res.ok) {
         return { success: false, message: data.message || "Login failed." };
@@ -107,25 +100,23 @@ export function AuthProvider({ children }) {
 
       return { success: true };
     } catch (err) {
-      console.error("LOGIN ERROR:", err); 
+      console.error("LOGIN ERROR:", err);
       return { success: false, message: "Network error. Please try again." };
     }
   }, []);
 
   const signup = useCallback(async (name, email, password, role) => {
     try {
-      const res = await fetch(`${BASE_URL}/api/v1/auth/signup`, { 
+      const res = await fetch(`${BASE_URL}/api/v1/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role }),
       });
 
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        data = {};
-      }
+      console.log("STATUS:", res.status);
+
+      const data = await res.json();
+      console.log("RESPONSE:", data);
 
       if (!res.ok) {
         return { success: false, message: data.message || "Signup failed." };
@@ -146,7 +137,7 @@ export function AuthProvider({ children }) {
 
       return { success: true };
     } catch (err) {
-      console.error("SIGNUP ERROR:", err); 
+      console.error("SIGNUP ERROR:", err);
       return { success: false, message: "Network error. Please try again." };
     }
   }, []);
@@ -156,38 +147,33 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const authFetch = useCallback(
-    async (url, options = {}) => {
-      const token = getToken();
+  const authFetch = useCallback(async (url, options = {}) => {
+    const token = getToken();
 
-      if (!token || isTokenExpired(token)) {
-        logout();
-        throw new Error("Session expired.");
-      }
+    if (!token || isTokenExpired(token)) {
+      logout();
+      throw new Error("Session expired.");
+    }
 
-      const res = await fetch(url, {
-        ...options,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          ...options.headers,
-        },
-      });
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...options.headers,
+      },
+    });
 
-      if (res.status === 401) {
-        logout();
-        throw new Error("Unauthorized.");
-      }
+    if (res.status === 401) {
+      logout();
+      throw new Error("Unauthorized.");
+    }
 
-      return res;
-    },
-    [logout]
-  );
+    return res;
+  }, [logout]);
 
   return (
-    <AuthContext.Provider
-      value={{ user, loading, login, signup, logout, authFetch }}
-    >
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, authFetch }}>
       {children}
     </AuthContext.Provider>
   );
