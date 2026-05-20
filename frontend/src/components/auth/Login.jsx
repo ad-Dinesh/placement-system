@@ -12,7 +12,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState("");
 
-  // ✅ NEW: Redirect if already logged in
+  
   useEffect(() => {
     if (user) navigate("/dashboard");
   }, [user, navigate]);
@@ -20,14 +20,14 @@ export default function Login() {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // ✅ NEW: Email validation
+ 
   const isValidEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (loading) return; // ✅ prevent double click
+    if (loading) return; 
 
     setError("");
 
