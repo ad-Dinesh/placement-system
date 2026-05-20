@@ -64,8 +64,8 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-gray-950/70 backdrop-blur-xl border-b border-white/10 shadow-[0_1px_20px_rgba(139,92,246,0.08)] flex items-center">
-        
+      <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-gray-950/70 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(139,92,246,0.12)] flex items-center">
+
         <div className="w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
 
           {/* Logo */}
@@ -73,7 +73,7 @@ export default function Navbar() {
             to="/"
             className="flex items-center gap-2.5 group"
           >
-            <div className="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:rotate-6">
+            <div className="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-violet-500/40">
               <Briefcase size={15} className="text-white" />
             </div>
 
@@ -91,7 +91,7 @@ export default function Navbar() {
                 className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   pathname === path
                     ? "bg-violet-500/10 text-violet-300"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                    : "text-gray-400 hover:text-white hover:bg-white/5 hover:-translate-y-[1px]"
                 }`}
               >
                 {name}
@@ -114,7 +114,7 @@ export default function Navbar() {
 
                 <Link
                   to="/signup"
-                  className="px-4 py-2 text-[13px] font-semibold bg-violet-500 text-white rounded-lg hover:bg-violet-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                  className="px-4 py-2 text-[13px] font-semibold bg-violet-500 text-white rounded-lg hover:bg-violet-600 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-violet-500/20"
                 >
                   Get Started
                 </Link>
@@ -122,7 +122,7 @@ export default function Navbar() {
             ) : (
               <>
                 {/* Notification */}
-                <button className="relative p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">
+                <button className="relative p-2 text-gray-400 hover:text-white hover:bg-white/5 hover:scale-105 rounded-lg transition-all duration-200">
                   <Bell size={16} />
 
                   <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
@@ -152,7 +152,7 @@ export default function Navbar() {
 
                   {/* Dropdown */}
                   {dropOpen && (
-                    <div className="absolute right-0 mt-2 w-52 bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute right-0 mt-2 w-52 bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-200">
 
                       {/* User Info */}
                       <div className="px-3 py-2.5 border-b border-white/10">
@@ -214,7 +214,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="fixed top-16 left-0 right-0 z-40 bg-gray-950/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 md:hidden">
+        <div className="fixed top-20 left-0 right-0 z-40 bg-gray-950/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 md:hidden">
 
           {NAV.map(({ name, path }) => (
             <Link
