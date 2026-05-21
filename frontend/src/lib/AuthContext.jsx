@@ -106,41 +106,46 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signup = useCallback(async (name, email, password, role) => {
-    try {
-      const res = await fetch(`${BASE_URL}/api/v1/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, role }),
-      });
+  try {
 
-      console.log("STATUS:", res.status);
+    const res = await fetch(`${BASE_URL}/api/v1/user/signup`, {
+      method: "POST",
 
-      const data = await res.json();
-      console.log("RESPONSE:", data);
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-      if (!res.ok) {
-        return { success: false, message: data.message || "Signup failed." };
-      }
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        role,
+      }),
+    });
 
-      if (!data.token) {
-        return { success: false, message: "Token not received." };
-      }
+    const data = await res.json();
 
-      saveToken(data.token);
-
-      const userData = safeSetUserFromToken(data.token);
-      if (!userData) {
-        return { success: false, message: "Invalid token." };
-      }
-
-      setUser(userData);
-
-      return { success: true };
-    } catch (err) {
-      console.error("SIGNUP ERROR:", err);
-      return { success: false, message: "Network error. Please try again." };
+    if (!res.ok) {
+      return {
+        success: false,
+        message: data.message || "Signup failed.",
+      };
     }
-  }, []);
+
+    return {
+      success: true,
+    };
+
+  } catch (err) {
+
+    console.error("SIGNUP ERROR:", err);
+
+    return {
+      success: false,
+      message: "Network error. Please try again.",
+    };
+  }
+}, []);
 
   const logout = useCallback(() => {
     removeToken();

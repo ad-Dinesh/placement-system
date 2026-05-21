@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useAuth } from "../../lib/AuthContext";
+import { USER_API_END_POINT } from "../../utils/constant";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -61,9 +62,9 @@ export default function Login() {
     <div className="min-h-[calc(100vh-4rem)] bg-gray-950 flex">
 
       {/* Left panel */}
-      <div className="hidden lg:flex flex-col justify-between w-[45%] bg-gray-900 border-r border-white/10 p-12">
+      <div className="hidden lg:flex flex-col justify-between w-[45%] bg-gradient-to-br from-gray-900 via-gray-950 to-violet-950/30 border-r border-white/10 p-12">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-violet-500 rounded-lg flex items-center justify-center shadow-lg shadow-violet-500/30">
             <Briefcase size={15} className="text-white" />
           </div>
           <span className="text-[15px] font-semibold text-white">
@@ -71,7 +72,7 @@ export default function Login() {
           </span>
         </div>
         <div>
-          <p className="text-4xl font-bold text-white leading-snug mb-4">
+          <p className="text-5xl font-bold text-white leading-snug mb-4">
             Your next big career move starts here.
           </p>
           <p className="text-gray-500 text-sm leading-relaxed">
@@ -87,7 +88,7 @@ export default function Login() {
 
       {/* Right form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
           <h1 className="text-2xl font-bold text-white mb-1">Welcome back</h1>
           <p className="text-sm text-gray-500 mb-8">
             Don't have an account?{" "}
