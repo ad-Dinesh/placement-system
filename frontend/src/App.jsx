@@ -14,14 +14,11 @@ import Signup from "./components/auth/Signup";
 
 import Applications from "./components/Applications";
 
+// FIXED IMPORT
+import Dashboard from "./components/Dashboard";
 
-// Placeholder Pages
-const Dashboard = () => (
-  <div className="p-8 text-white text-xl">
-    Dashboard
-  </div>
-);
 
+// Not Found Page
 const NotFound = () => (
   <div className="p-8 text-white text-xl">
     404 — Not Found
@@ -41,6 +38,7 @@ function Loader() {
 
 // Guest Route
 function GuestRoute({ children }) {
+
   const { user, loading } = useAuth();
 
   if (loading) return <Loader />;
@@ -55,6 +53,7 @@ function GuestRoute({ children }) {
 
 // Protected Route
 function ProtectedRoute({ children }) {
+
   const { user, loading } = useAuth();
 
   if (loading) return <Loader />;
@@ -69,6 +68,7 @@ function ProtectedRoute({ children }) {
 
 // App Routes
 function AppRoutes() {
+
   const location = useLocation();
 
   const hideNavbar = ["/login", "/signup"].includes(
@@ -96,6 +96,7 @@ function AppRoutes() {
             path="/companies"
             element={<Companies />}
           />
+
           <Route
             path="/companies/:id"
             element={<SingleCompany />}
@@ -151,6 +152,7 @@ function AppRoutes() {
         </Routes>
 
       </main>
+
     </div>
   );
 }
@@ -158,6 +160,7 @@ function AppRoutes() {
 
 // Main App
 export default function App() {
+
   return (
     <AuthProvider>
       <AppRoutes />
