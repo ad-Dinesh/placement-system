@@ -6,6 +6,8 @@ import Navbar from "./components/shared/Navbar";
 
 import Home from "./components/Home";
 import Jobs from "./components/Jobs";
+import Companies from "./components/Companies";
+import SingleCompany from "./components/SingleCompany";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
@@ -14,12 +16,6 @@ import Applications from "./components/Applications";
 
 
 // Placeholder Pages
-const Companies = () => (
-  <div className="p-8 text-white text-xl">
-    Companies Page
-  </div>
-);
-
 const Dashboard = () => (
   <div className="p-8 text-white text-xl">
     Dashboard
@@ -99,6 +95,10 @@ function AppRoutes() {
           <Route
             path="/companies"
             element={<Companies />}
+          />
+          <Route
+            path="/companies/:id"
+            element={<SingleCompany />}
           />
 
 
