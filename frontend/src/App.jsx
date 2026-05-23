@@ -9,6 +9,7 @@ import Jobs from "./components/Jobs";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
+import SingleJob from "./components/SingleJob";
 
 
 // Placeholder Pages
@@ -98,6 +99,11 @@ function AppRoutes() {
           <Route
             path="/jobs"
             element={<Jobs />}
+          />
+
+          <Route
+            path="/jobs/:id"
+            element={<SingleJob />}
           />
 
           <Route
