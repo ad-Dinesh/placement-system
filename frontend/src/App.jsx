@@ -9,19 +9,14 @@ import Jobs from "./components/Jobs";
 
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
-import SingleJob from "./components/SingleJob";
+
+import Applications from "./components/Applications";
 
 
 // Placeholder Pages
 const Companies = () => (
   <div className="p-8 text-white text-xl">
     Companies Page
-  </div>
-);
-
-const Applications = () => (
-  <div className="p-8 text-white text-xl">
-    My Applications
   </div>
 );
 
@@ -86,7 +81,7 @@ function AppRoutes() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      
+
       {!hideNavbar && <Navbar />}
 
       <main className="pt-16">
@@ -99,11 +94,6 @@ function AppRoutes() {
           <Route
             path="/jobs"
             element={<Jobs />}
-          />
-
-          <Route
-            path="/jobs/:id"
-            element={<SingleJob />}
           />
 
           <Route
