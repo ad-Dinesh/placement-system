@@ -7,7 +7,7 @@ import {
     Bell, Settings, LogOut, Camera, ExternalLink, Award,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+// const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ── Date and Content Helpers ─────────────────────────────────
 function timeAgo(dateString) {
@@ -103,7 +103,7 @@ function ProfileModal({ profile, onClose, onSave }) {
         setSaving(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE}/users/profile`, {
+            const res = await fetch(`${API_BASE}api/v1/users/profile`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ ...form, skills }),
@@ -207,41 +207,69 @@ export default function SeekerDashboard() {
     const [activeTab, setActiveTab] = useState("overview");
 
     useEffect(() => {
-        const fetchDashboardPayload = async () => {
-            setLoading(true);
-            setError("");
-            try {
-                const token = localStorage.getItem("token");
-                const headers = { Authorization: `Bearer ${token}` };
 
-                const [profRes, appsRes, savedRes] = await Promise.all([
-                    fetch(`${API_BASE}/users/profile`, { headers }),
-                    fetch(`${API_BASE}/applications/applied`, { headers }),
-                    fetch(`${API_BASE}/users/saved-jobs`, { headers }),
-                ]);
+    const fetchDashboardPayload = async () => {
 
-                if (profRes.ok) {
-                    const profileData = await profRes.json();
-                    setProfile(profileData);
-                }
+        setLoading(true);
+        setError("");
 
-                if (appsRes.ok) {
-                    const appsData = await appsRes.json();
-                    setApplications(appsData.applications || appsData || []);
-                }
+        try {
 
-                if (savedRes.ok) {
-                    const savedData = await savedRes.json();
-                    setSavedJobs(savedData.jobs || savedData || []);
-                }
-            } catch (err) {
-                setError("Engine network failure: Failed to sync dashboard telemetry.");
-            } {
-                setLoading(false);
+            const token = localStorage.getItem("token");
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            };
+
+            // PROFILE API
+            const profRes = await fetch(
+                "http://localhost:8000/api/v1/user/profile",
+                { headers }
+            );
+
+            // APPLICATIONS API
+            const appsRes = await fetch(
+                "http://localhost:8000/api/v1/applications/applied",
+                { headers }
+            );
+
+            // PROFILE DATA
+            if (profRes.ok) {
+
+                const profileData = await profRes.json();
+
+                setProfile(profileData);
+
             }
-        };
-        fetchDashboardPayload();
-    }, []);
+
+            // APPLICATION DATA
+            if (appsRes.ok) {
+
+                const appsData = await appsRes.json();
+
+                setApplications(
+                    appsData.applications || []
+                );
+
+            }
+
+        } catch (err) {
+
+            console.log(err);
+
+            setError("Failed to load dashboard");
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    fetchDashboardPayload();
+
+}, []);
 
     const handleResumeUpload = async (e) => {
         const file = e.target.files[0];
@@ -252,7 +280,7 @@ export default function SeekerDashboard() {
             const token = localStorage.getItem("token");
             const fd = new FormData();
             fd.append("resume", file);
-            const res = await fetch(`${API_BASE}/users/resume`, {
+            const res = await fetch(`${API_BASE}api/v1/users/resume`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },
                 body: fd,
@@ -270,7 +298,7 @@ export default function SeekerDashboard() {
     const handleUnsave = async (jobId) => {
         try {
             const token = localStorage.getItem("token");
-            await fetch(`${API_BASE}/users/saved-jobs/${jobId}`, {
+            await fetch(`${API_BASE}api/v1/users/saved-jobs/${jobId}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });

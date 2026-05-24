@@ -37,9 +37,8 @@ function PasswordStrength({ password }) {
         {RULES.map((_, i) => (
           <div
             key={i}
-            className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-              i < passed ? colors[passed - 1] : "bg-white/10"
-            }`}
+            className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i < passed ? colors[passed - 1] : "bg-white/10"
+              }`}
           />
         ))}
       </div>
@@ -147,9 +146,21 @@ export default function Signup() {
     setLoading(false);
 
     if (result.success) {
-      navigate("/dashboard");
+
+      if (result.user?.role === "employer") {
+
+        navigate("/recruiter/dashboard");
+
+      } else {
+
+        navigate("/dashboard");
+
+      }
+
     } else {
+
       setError(result.message);
+
     }
   };
 
@@ -284,11 +295,10 @@ export default function Signup() {
                         role: value,
                       }))
                     }
-                    className={`py-2.5 text-sm font-medium rounded-lg border transition-all duration-200 hover:-translate-y-[1px] ${
-                      form.role === value
+                    className={`py-2.5 text-sm font-medium rounded-lg border transition-all duration-200 hover:-translate-y-[1px] ${form.role === value
                         ? "bg-violet-500/20 border-violet-500 text-violet-300"
                         : "bg-gray-900 border-white/10 text-gray-500 hover:text-gray-300 hover:border-white/20"
-                    }`}
+                      }`}
                   >
                     {label}
                   </button>
@@ -384,11 +394,10 @@ export default function Signup() {
                 onChange={handleChange}
                 placeholder="••••••••"
                 autoComplete="new-password"
-                className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none transition-colors ${
-                  form.confirm && form.confirm !== form.password
+                className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-gray-600 outline-none transition-colors ${form.confirm && form.confirm !== form.password
                     ? "border-red-500/50 focus:border-red-500"
                     : "border-white/10 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
-                }`}
+                  }`}
               />
 
               {form.confirm &&
