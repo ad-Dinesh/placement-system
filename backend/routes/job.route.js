@@ -11,8 +11,7 @@ import isAuthenticated from "../middlewares/isAuthenticated.js";
 const router = express.Router();
 
 // create job
-router.post("/", isAuthenticated, createJob);
-
+router.post("/create", isAuthenticated, createJob);
 // get all jobs
 router.get("/", getJobs);
 
