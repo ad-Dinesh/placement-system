@@ -14,8 +14,9 @@ import Signup from "./components/auth/Signup";
 
 import Applications from "./components/Applications";
 
-// FIXED IMPORT
+
 import Dashboard from "./components/Dashboard";
+import RecruiterDashboard from "./components/admin/RecruiterDashboard";
 
 
 // Not Found Page
@@ -134,6 +135,15 @@ function AppRoutes() {
           />
 
           <Route
+            path="/recruiter/dashboard"
+            element={
+              <ProtectedRoute>
+                <RecruiterDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/applications"
             element={
               <ProtectedRoute>
@@ -141,6 +151,7 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
+
 
 
           {/* 404 */}
