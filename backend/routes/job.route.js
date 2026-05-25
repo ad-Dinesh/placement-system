@@ -1,24 +1,54 @@
 import express from "express";
+
 import {
   createJob,
   getJobs,
   getJobById,
   getAdminJobs,
+  deleteJob,
 } from "../controllers/job.controller.js";
 
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const router = express.Router();
 
-// create job
-router.post("/create", isAuthenticated, createJob);
-// get all jobs
-router.get("/", getJobs);
 
-// get jobs created by admin
-router.get("/admin", isAuthenticated, getAdminJobs);
+// CREATE JOB
+router.post(
+  "/create",
+  isAuthenticated,
+  createJob
+);
 
-// get job by id
-router.get("/:id", getJobById);
+
+// GET ALL JOBS
+router.get(
+  "/",
+  getJobs
+);
+
+
+// GET ADMIN JOBS
+router.get(
+  "/admin",
+  isAuthenticated,
+  getAdminJobs
+);
+
+
+// GET JOB BY ID
+router.get(
+  "/:id",
+  getJobById
+);
+
+
+// DELETE JOB
+router.delete(
+  "/:id",
+  isAuthenticated,
+  deleteJob
+);
+
 
 export default router;

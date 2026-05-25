@@ -47,6 +47,43 @@ export default function RecruiterJobs() {
     }
 
   };
+  const deleteJob = async (jobId) => {
+
+    try {
+
+      const token =
+        localStorage.getItem("jwt_token");
+
+      const response = await fetch(
+        `http://localhost:8000/api/v1/jobs/${jobId}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.ok) {
+
+        alert("Job Deleted");
+
+        fetchJobs();
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
 
 
   return (
@@ -134,14 +171,20 @@ export default function RecruiterJobs() {
                 {/* BUTTONS */}
                 <div className="flex gap-3 mt-6">
 
-                  <button className="bg-violet-500 hover:bg-violet-600 px-4 py-2 rounded-xl font-medium">
+                  <Link
+                    to={`/recruiter/jobs/${job._id}/applicants`}
+                    className="bg-violet-500 hover:bg-violet-600 px-4 py-2 rounded-xl font-medium"
+                  >
 
                     View Applicants
 
-                  </button>
+                  </Link>
 
 
-                  <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl font-medium">
+                  <button
+                    onClick={() => deleteJob(job._id)}
+                    className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl font-medium"
+                  >
 
                     Delete
 
