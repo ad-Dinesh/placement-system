@@ -17,6 +17,7 @@ import Applications from "./components/Applications";
 
 import Dashboard from "./components/Dashboard";
 import RecruiterDashboard from "./components/admin/RecruiterDashboard";
+import PostJob from "./components/admin/Postjob";
 
 
 // Not Found Page
@@ -139,6 +140,14 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <RecruiterDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/recruiter/postjob"
+            element={
+              <ProtectedRoute>
+                <PostJob />
               </ProtectedRoute>
             }
           />
