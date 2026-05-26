@@ -149,7 +149,7 @@ export default function Signup() {
 
       if (result.user?.role === "employer") {
 
-        navigate("/recruiter/dashboard");
+        navigate("/employer/dashboard");
 
       } else {
 

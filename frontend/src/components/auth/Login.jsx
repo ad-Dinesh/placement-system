@@ -37,9 +37,9 @@ export default function Login() {
 
     if (!user) return;
 
-    if (user.role === "recruiter") {
+    if (user.role === "employer") {
 
-      navigate("/recruiter/dashboard");
+      navigate("/employer/dashboard");
 
     } else {
 
@@ -99,9 +99,9 @@ export default function Login() {
     // ROLE BASED LOGIN
     if (result.success) {
 
-      if (result.user?.role === "recruiter") {
+      if (result.user?.role === "employer") {
 
-        navigate("/recruiter/dashboard");
+        navigate("/employer/dashboard");
 
       } else {
 
