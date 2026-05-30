@@ -264,6 +264,7 @@ export default function RecruiterDashboard() {
                 <Plus size={12} /> Post your first job
               </Link>
             }
+            
           >
             {jobs.map((job) => <JobRow key={job._id} job={job} />)}
           </Card>
