@@ -16,16 +16,67 @@ export default function PostJob() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
     setPublishing(true);
-    // Simulating API loading windows on local configurations
-    await new Promise((r) => setTimeout(r, 1500));
-    setPublishing(false);
+
+    const token = localStorage.getItem("jwt_token");
+
+    const res = await fetch("http://localhost:8000/api/v1/jobs/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: form.title,
+        description: form.desc,
+        requirements: tags,
+        salary: {
+          min: 600000,
+          max: 1200000,
+        },
+        location: form.location,
+        experienceLevel: 1,
+        jobType: form.type.toLowerCase(),
+        position: 1,
+
+        // Replace with your actual company id
+        company: "6a0c545539280d4400626f9c",
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Failed to create job");
+      return;
+    }
+
     setSuccess(true);
-    setForm({ title: "", company: "", location: "", type: "Full-time", salary: "", desc: "" });
-    setTimeout(() => setSuccess(false), 4000);
-  };
+
+    setForm({
+      title: "",
+      company: "",
+      location: "",
+      type: "full-time",
+      salary: "",
+      desc: "",
+    });
+
+    setTimeout(() => setSuccess(false), 3000);
+
+    console.log("JOB CREATED =>", data);
+
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  } finally {
+    setPublishing(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6 sm:p-10 font-sans">

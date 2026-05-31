@@ -268,7 +268,7 @@ export default function MyApplications() {
 
   try {
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("jwt_token");
 
     console.log("Fetching:", `${API_BASE}/applications/applied`);
 
@@ -312,7 +312,7 @@ export default function MyApplications() {
     if (!withdrawApp) return;
     setWithdrawing(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("jwt_token");
       const res = await fetch(`${API_BASE}/applications/${withdrawApp._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },

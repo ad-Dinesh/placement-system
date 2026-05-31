@@ -147,7 +147,7 @@ function AppRoutes() {
             }
           />
           <Route
-            path="/recruiter/postjob"
+            path="/recruiter/post-job"
             element={
               <ProtectedRoute>
                 <PostJob />
