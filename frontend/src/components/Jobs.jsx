@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   Search, MapPin, Briefcase, Wallet, Clock3, SlidersHorizontal,
   X, ChevronRight, Sparkles, Bookmark, CheckCircle2, Loader2,
@@ -7,65 +7,8 @@ import {
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-// ── Mock Data ────────────────────────────────────────────────
-const jobsData = [
-  {
-    id: 1, company: "Google", role: "Frontend Developer", location: "Remote",
-    salary: "₹18 LPA", salaryNum: 18, type: "Full Time", experience: "1-3 Years",
-    posted: "Posted 2 days ago",
-    skills: ["React", "TypeScript", "Tailwind CSS"],
-    description: "We are looking for a Frontend Developer to join our core search infrastructure team. You will build highly accessible user interfaces used by billions of users worldwide.",
-  },
-  {
-    id: 2, company: "Amazon", role: "Backend Engineer", location: "Hyderabad",
-    salary: "₹22 LPA", salaryNum: 22, type: "Remote", experience: "3+ Years",
-    posted: "Posted 1 day ago",
-    skills: ["Node.js", "AWS", "DynamoDB", "Java"],
-    description: "Scale our primary retail fulfillment logic. You will optimize complex distributed microservices, minimize database latency windows, and orchestrate serverless event architectures.",
-  },
-  {
-    id: 3, company: "Netflix", role: "UI/UX Designer", location: "Bangalore",
-    salary: "₹14 LPA", salaryNum: 14, type: "Hybrid", experience: "1-3 Years",
-    posted: "Posted 3 days ago",
-    skills: ["Figma", "Prototyping", "Design Systems"],
-    description: "Craft cinematic user journeys. This team owns the post-signup discovery interface, building immersive canvas animations and conducting continuous A/B multivariate testing.",
-  },
-  {
-    id: 4, company: "Meta", role: "React Developer", location: "Remote",
-    salary: "₹25 LPA", salaryNum: 25, type: "Full Time", experience: "3+ Years",
-    posted: "Posted 5 hours ago",
-    skills: ["React", "GraphQL", "Relay", "Next.js"],
-    description: "Advance the next generation of social graph rendering engines. You will work on cutting-edge internal React primitives to reduce bundle overhead and initial paint times.",
-  },
-  {
-    id: 5, company: "Razorpay", role: "SDE-1 (Frontend)", location: "Bangalore",
-    salary: "₹8 LPA", salaryNum: 8, type: "Full Time", experience: "Fresher",
-    posted: "Posted Today",
-    skills: ["JavaScript", "React", "State Management"],
-    description: "Perfect for early-career developers eager to own meaningful checkout features. You'll work closely with product managers to implement robust payment checkout widgets.",
-  },
-  {
-    id: 6, company: "Cred", role: "Full Stack Engineer", location: "Mumbai",
-    salary: "₹30 LPA", salaryNum: 30, type: "Full Time", experience: "3+ Years",
-    posted: "Posted 1 day ago",
-    skills: ["Next.js", "Go", "PostgreSQL", "Docker"],
-    description: "Architect secure financial commerce integrations. You will deliver high-throughput software pipelines processing transaction ledger events at peak load conditions.",
-  },
-  {
-    id: 7, company: "Zomato", role: "Mobile App Developer", location: "Delhi NCR",
-    salary: "₹16 LPA", salaryNum: 16, type: "Hybrid", experience: "1-3 Years",
-    posted: "Posted 4 days ago",
-    skills: ["React Native", "Swift", "Kotlin"],
-    description: "Enhance critical geofencing and real-time delivery tracking application primitives.",
-  },
-  {
-    id: 8, company: "PhonePe", role: "DevOps Engineer", location: "Pune",
-    salary: "₹20 LPA", salaryNum: 20, type: "Full Time", experience: "3+ Years",
-    posted: "Posted Yesterday",
-    skills: ["Kubernetes", "Terraform", "GitHub Actions", "AWS"],
-    description: "Orchestrate highly reliable hybrid cloud architectures with robust infrastructure-as-code.",
-  },
-];
+
+
 
 // ── Apply Modal ──────────────────────────────────────────────
 function ApplyModal({ job, onClose, onSuccess }) {
@@ -109,11 +52,16 @@ function ApplyModal({ job, onClose, onSuccess }) {
       formData.append("resume",      resumeFile);
       formData.append("coverLetter", coverLetter);
 
-      const res = await fetch(`${API_BASE}/applications`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+      const res = await fetch(
+  `http://localhost:8000/api/v1/applications/apply/${job._id}`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  }
+);
 
       if (!res.ok) {
         const data = await res.json();
@@ -145,11 +93,11 @@ function ApplyModal({ job, onClose, onSuccess }) {
         <div className="flex items-start justify-between gap-4 p-5 border-b border-white/8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl flex items-center justify-center font-bold text-white shrink-0">
-              {job.company[0]}
+              {job.company?.name[0]}
             </div>
             <div>
-              <p className="text-sm font-bold text-white leading-tight">{job.role}</p>
-              <p className="text-xs text-violet-400 mt-0.5">{job.company} · {job.location}</p>
+              <p className="text-sm font-bold text-white leading-tight">{job.title}</p>
+              <p className="text-xs text-violet-400 mt-0.5">{job.company?.name} · {job.location}</p>
             </div>
           </div>
           <button
@@ -223,7 +171,7 @@ function ApplyModal({ job, onClose, onSuccess }) {
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
               rows={4}
-              placeholder={`Tell ${job.company} why you're a great fit for this role...`}
+              placeholder={`Tell ${job.company?.name} why you're a great fit for this role...`}
               className="w-full bg-gray-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 outline-none resize-none focus:border-violet-500/50 transition-colors"
             />
             <p className="text-xs text-gray-600 mt-1 text-right">{coverLetter.length}/1000</p>
@@ -274,24 +222,73 @@ export default function Jobs() {
   const [savedJobIds,    setSavedJobIds]    = useState(new Set());
   const [appliedJobIds,  setAppliedJobIds]  = useState(new Set());
   const [applyModalJob,  setApplyModalJob]  = useState(null); // controls modal
+const [jobsData, setJobsData] = useState([]);
+const [loading, setLoading] = useState(true)
+  useEffect(() => {
+  const fetchJobs = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:8000/api/v1/jobs"
+      );
+
+      const data = await res.json();
+
+      console.log("ALL JOBS =>", data);
+
+      setJobsData(data.jobs || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchJobs();
+}, []);
+
+
 
   const filteredJobs = useMemo(() => {
-    return jobsData.filter((job) => {
-      const matchesSearch =
-        job.role.toLowerCase().includes(search.toLowerCase()) ||
-        job.company.toLowerCase().includes(search.toLowerCase());
-      const matchesType   = selectedTypes.length === 0  || selectedTypes.includes(job.type);
-      const matchesExp    = selectedExp.length === 0    || selectedExp.includes(job.experience);
-      const matchesCity   = selectedCities.length === 0 || selectedCities.includes(job.location);
-      const matchesSalary = selectedSalary.length === 0 || selectedSalary.some((r) => {
-        if (r === "5+ LPA")  return job.salaryNum >= 5;
-        if (r === "10+ LPA") return job.salaryNum >= 10;
-        if (r === "20+ LPA") return job.salaryNum >= 20;
-        return true;
-      });
-      return matchesSearch && matchesType && matchesExp && matchesCity && matchesSalary;
-    });
-  }, [search, selectedTypes, selectedExp, selectedCities, selectedSalary]);
+  return jobsData.filter((job) => {
+    const matchesSearch =
+      job.title?.toLowerCase().includes(search.toLowerCase()) ||
+      job.company?.name?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesType =
+      selectedTypes.length === 0 ||
+      selectedTypes.includes(job.jobType);
+
+    const matchesExp =
+      selectedExp.length === 0 ||
+      selectedExp.includes(String(job.experienceLevel));
+
+    const matchesCity =
+      selectedCities.length === 0 ||
+      selectedCities.includes(job.location);
+
+    return (
+      matchesSearch &&
+      matchesType &&
+      matchesExp &&
+      matchesCity
+    );
+  });
+}, [
+  jobsData,
+  search,
+  selectedTypes,
+  selectedExp,
+  selectedCities,
+]); 
+
+
+  if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      Loading Jobs...
+    </div>
+  );
+}
 
   const toggleFilter = (list, setList, value) =>
     setList((prev) => prev.includes(value) ? prev.filter((i) => i !== value) : [...prev, value]);
@@ -466,20 +463,20 @@ export default function Jobs() {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <h3 className="text-xl font-bold tracking-tight group-hover:text-violet-400 transition-colors pr-16">
-                            {job.role}
+                            {job.title}
                           </h3>
-                          <p className="text-gray-400 text-sm mt-0.5">{job.company}</p>
+                          <p className="text-gray-400 text-sm mt-0.5">{job.company?.name}</p>
                         </div>
                         {!isApplied && (
                           <span className="bg-white/5 border border-white/10 text-gray-300 text-xs font-medium px-2.5 py-1 rounded-lg shrink-0">
-                            {job.type}
+                            {job.jobType}
                           </span>
                         )}
                       </div>
 
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-4 text-xs text-gray-500">
                         <span className="flex items-center gap-1.5 text-gray-400"><MapPin size={13} className="text-violet-400" />{job.location}</span>
-                        <span className="flex items-center gap-1.5"><Wallet size={13} />{job.salary}</span>
+                        <span className="flex items-center gap-1.5"><Wallet size={13} />₹{job.salary?.min} - ₹{job.salary?.max}</span>
                       </div>
 
                       <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-white/5">
@@ -503,12 +500,12 @@ export default function Jobs() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl flex items-center justify-center font-bold text-lg shadow-inner">
-                        {selectedJob.company[0]}
+                        {selectedJob.company?.name[0]}
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold tracking-tight">{selectedJob.role}</h2>
+                        <h2 className="text-2xl font-bold tracking-tight">{selectedJob.title}</h2>
                         <p className="text-violet-400 text-sm font-medium flex items-center gap-1.5 mt-0.5">
-                          <Building2 size={14} /> {selectedJob.company} Ecosystem
+                          <Building2 size={14} /> {selectedJob.company?.name} Ecosystem
                         </p>
                       </div>
                     </div>
@@ -525,7 +522,7 @@ export default function Jobs() {
                       <Briefcase size={12} /> {selectedJob.experience} Range
                     </span>
                     <span className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-1.5 text-xs text-emerald-400 font-bold flex items-center gap-1.5">
-                      <Wallet size={12} /> {selectedJob.salary}
+                      <Wallet size={12} /> ₹{selectedJob.salary?.min} - ₹{selectedJob.salary?.max}
                     </span>
                   </div>
                 </div>
