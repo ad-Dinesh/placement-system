@@ -42,15 +42,16 @@ function isTokenExpired(token) {
 function safeSetUserFromToken(token) {
   const decoded = decodeToken(token);
 
-  if (!decoded || !decoded.email || !decoded.sub) {
+  if (!decoded || !decoded.email || !decoded.userId) {
     removeToken();
     return null;
   }
 
   return {
-    name: decoded.name,
+    name: decoded.fullname || decoded.name || decoded.email.split("@")[0],
     email: decoded.email,
-    id: decoded.sub,
+    id: decoded.userId,
+    role: decoded.role,
   };
 }
 

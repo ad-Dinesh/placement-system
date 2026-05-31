@@ -1,3 +1,4 @@
+
 import {
   createContext,
   useContext,
@@ -72,14 +73,15 @@ export function AuthProvider({ children }) {
 
     const token = getToken();
 
+
+
     if (token && !isTokenExpired(token)) {
 
       const decoded = decodeToken(token);
 
       setUser({
-        name: decoded.name,
         email: decoded.email,
-        id: decoded.sub,
+        id: decoded.userId,
         role: decoded.role,
       });
 
@@ -97,22 +99,22 @@ export function AuthProvider({ children }) {
   // ─── LOGIN ──────────────────────────────────────────
 
   const login = useCallback(async (email, password) => {
-
+console.log("LOGIN FUNCTION STARTED");
     try {
 
-      const res = await fetch("/api/auth/login", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const res = await fetch(
+  "http://localhost:8000/api/v1/user/login",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  }
+);
 
 
       const data = await res.json();
@@ -128,37 +130,47 @@ export function AuthProvider({ children }) {
       }
 
 
-      saveToken(data.token);
+    saveToken(data.token);
 
-      const decoded = decodeToken(data.token);
+const decoded = decodeToken(data.token);
 
+console.log("decoded =>", decoded);
 
-      const userData = {
-        name: decoded.name,
-        email: decoded.email,
-        id: decoded.sub,
-        role: decoded.role,
-      };
+if (!decoded) {
+  return {
+    success: false,
+    message: "Token decode failed",
+  };
+}
 
+const userData = {
+  email: decoded.email || data.user?.email,
+  id: decoded.userId || data.user?._id,
+  role: decoded.role || data.user?.role,
+};
 
-      setUser(userData);
+console.log("LOGIN SUCCESS");
 
+setUser(userData);
+console.log("LOGIN SUCCESS");
+return {
+  success: true,
+  user: userData,
+};
 
-      return {
-        success: true,
-        user: userData,
-      };
+    }  catch (error) {
 
-    } catch {
+  console.error("LOGIN ERROR =>", error);
 
-      return {
-        success: false,
-        message:
-          "Network error. Please try again.",
-      };
-    }
+  return {
+    success: false,
+    message: error.message || "Network error",
+  };
+
+}
 
   }, []);
+  
 
 
   // ─── SIGNUP ─────────────────────────────────────────
@@ -172,21 +184,21 @@ export function AuthProvider({ children }) {
 
     try {
 
-      const res = await fetch("/api/auth/signup", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          role,
-        }),
-      });
+      const res = await fetch(
+  "http://localhost:8000/api/v1/user/signup",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      role,
+    }),
+  }
+);
 
 
       const data = await res.json();
@@ -208,9 +220,9 @@ export function AuthProvider({ children }) {
 
 
       const userData = {
-        name: decoded.name,
+
         email: decoded.email,
-        id: decoded.sub,
+        id: decoded.userId,
         role: decoded.role,
       };
 

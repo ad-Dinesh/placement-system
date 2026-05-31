@@ -37,7 +37,7 @@ export default function Login() {
 
     if (!user) return;
 
-    if (user.role === "recruiter") {
+    if (user.role === "employer") {
 
       navigate("/recruiter/dashboard");
 
@@ -66,7 +66,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-
     if (loading) return;
 
     setError("");
@@ -99,7 +98,7 @@ export default function Login() {
     // ROLE BASED LOGIN
     if (result.success) {
 
-      if (result.user?.role === "recruiter") {
+      if (result.user?.role === "employer") {
 
         navigate("/recruiter/dashboard");
 

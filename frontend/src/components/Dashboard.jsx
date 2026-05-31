@@ -102,7 +102,7 @@ function ProfileModal({ profile, onClose, onSave }) {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("jwt_token");
             const res = await fetch(`${API_BASE}api/v1/users/profile`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -125,7 +125,7 @@ function ProfileModal({ profile, onClose, onSave }) {
                     <h3 className="text-sm font-bold text-white tracking-wide">Edit Corporate Profile</h3>
                     <button onClick={onClose} className="text-gray-500 hover:text-white hover:bg-white/5 p-1 rounded-lg transition-colors"><XCircle size={18} /></button>
                 </div>
-                
+
                 <div className="overflow-y-auto p-5 space-y-4 custom-scrollbar">
                     {[
                         { label: "Full Professional Name", key: "name", placeholder: "e.g. Dharavath Dinesh" },
@@ -208,68 +208,76 @@ export default function SeekerDashboard() {
 
     useEffect(() => {
 
-    const fetchDashboardPayload = async () => {
+        const fetchDashboardPayload = async () => {
 
-        setLoading(true);
-        setError("");
+            setLoading(true);
+            setError("");
 
-        try {
+            try {
 
-            const token = localStorage.getItem("token");
+                const token = localStorage.getItem("jwt_token");
 
-            const headers = {
-                Authorization: `Bearer ${token}`
-            };
+                const headers = {
+                    Authorization: `Bearer ${token}`
+                };
 
-            // PROFILE API
-            const profRes = await fetch(
-                "http://localhost:8000/api/v1/user/profile",
-                { headers }
-            );
-
-            // APPLICATIONS API
-            const appsRes = await fetch(
-                "http://localhost:8000/api/v1/applications/applied",
-                { headers }
-            );
-
-            // PROFILE DATA
-            if (profRes.ok) {
-
-                const profileData = await profRes.json();
-
-                setProfile(profileData);
-
-            }
-
-            // APPLICATION DATA
-            if (appsRes.ok) {
-
-                const appsData = await appsRes.json();
-
-                setApplications(
-                    appsData.applications || []
+                // PROFILE API
+                const profRes = await fetch(
+                    "http://localhost:8000/api/v1/user/profile",
+                    { headers }
                 );
 
+                // APPLICATIONS API
+                const appsRes = await fetch(
+                    "http://localhost:8000/api/v1/applications/applied",
+                    { headers }
+                );
+
+                // PROFILE DATA
+                if (profRes.ok) {
+
+                    const profileData = await profRes.json();
+
+                    setProfile({
+                        name: profileData.user?.fullname,
+                        email: profileData.user?.email,
+                        bio: profileData.user?.profile?.bio || "",
+                        skills: profileData.user?.profile?.skills || [],
+                        resumeUrl: profileData.user?.profile?.resume || "",
+                        location: profileData.user?.profile?.location || "",
+                        profilePicture: profileData.user?.profile?.profilePicture || "",
+                    });
+
+                }
+
+                // APPLICATION DATA
+                if (appsRes.ok) {
+
+                    const appsData = await appsRes.json();
+
+                    setApplications(
+                        appsData.applications || []
+                    );
+
+                }
+
+            } catch (err) {
+
+                console.log(err);
+
+                setError("Failed to load dashboard");
+
+            } finally {
+
+                setLoading(false);
+
             }
 
-        } catch (err) {
+        };
 
-            console.log(err);
+        fetchDashboardPayload();
 
-            setError("Failed to load dashboard");
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-    fetchDashboardPayload();
-
-}, []);
+    }, []);
 
     const handleResumeUpload = async (e) => {
         const file = e.target.files[0];
@@ -277,7 +285,7 @@ export default function SeekerDashboard() {
         setResumeLoading(true);
         setError("");
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("jwt_token");
             const fd = new FormData();
             fd.append("resume", file);
             const res = await fetch(`${API_BASE}api/v1/users/resume`, {
@@ -297,7 +305,7 @@ export default function SeekerDashboard() {
 
     const handleUnsave = async (jobId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("jwt_token");
             await fetch(`${API_BASE}api/v1/users/saved-jobs/${jobId}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
@@ -354,12 +362,12 @@ export default function SeekerDashboard() {
                     <div className="flex flex-col md:flex-row gap-6 items-start md:items-center relative z-10">
                         {/* Avatar Column */}
                         <div className="relative shrink-0 group">
-                          <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-xl shadow-violet-950/40">
-                              {profile?.name?.[0]?.toUpperCase() || "U"}
-                          </div>
-                          <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-800 border border-white/10 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 transition-colors shadow-md">
-                              <Camera size={12} />
-                          </button>
+                            <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-xl shadow-violet-950/40">
+                                {profile?.name?.[0]?.toUpperCase() || "U"}
+                            </div>
+                            <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-800 border border-white/10 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 transition-colors shadow-md">
+                                <Camera size={12} />
+                            </button>
                         </div>
 
                         {/* Metadata Text Details Stack */}
@@ -417,8 +425,8 @@ export default function SeekerDashboard() {
                                     </a>
                                 )}
                                 <label className={`flex items-center gap-2 cursor-pointer text-xs font-bold px-3 py-2 rounded-xl border transition-all shadow-sm ${profile?.resumeUrl
-                                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                                        : "bg-white/5 border-white/10 text-gray-400 hover:border-violet-500/40 hover:text-white bg-white/[0.01]"
+                                    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                                    : "bg-white/5 border-white/10 text-gray-400 hover:border-violet-500/40 hover:text-white bg-white/[0.01]"
                                     }`}>
                                     {resumeLoading
                                         ? <Loader2 size={13} className="animate-spin" />
@@ -460,8 +468,8 @@ export default function SeekerDashboard() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all ${activeTab === tab.id
-                                    ? "bg-violet-500 text-white shadow-md shadow-violet-950/50"
-                                    : "text-gray-500 hover:text-gray-300"
+                                ? "bg-violet-500 text-white shadow-md shadow-violet-950/50"
+                                : "text-gray-500 hover:text-gray-300"
                                 }`}
                         >
                             {tab.label}
@@ -470,7 +478,7 @@ export default function SeekerDashboard() {
                 </div>
 
                 {/* ── TAB INTERFACES STACK ────────────────────────────── */}
-                
+
                 {/* INTERFACE PANEL A: OVERVIEW ENGINE */}
                 {activeTab === "overview" && (
                     <div className="space-y-6 animate-fadeIn">
@@ -497,15 +505,15 @@ export default function SeekerDashboard() {
                                         {applications.slice(0, 4).map((app) => {
                                             const st = STATUS_MAP[app.status] || STATUS_MAP.pending;
                                             const StatusIcon = st.icon;
-                                            const brandStyle = getBrandStyle(app.job?.company || "?");
+                                            const brandStyle = getBrandStyle(app.job?.company?.name || "?");
                                             return (
                                                 <div key={app._id || app.id} className="flex items-center gap-3.5 px-5 py-4 hover:bg-white/[0.02] transition-colors">
                                                     <div className={`w-9 h-9 bg-gradient-to-br ${brandStyle} rounded-xl flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-md`}>
-                                                        {(app.job?.company || "?")[0].toUpperCase()}
+                                                        {(app.job?.company?.name || "?")[0].toUpperCase()}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-bold text-white truncate leading-snug">{app.job?.role}</p>
-                                                        <p className="text-xs font-medium text-gray-400 truncate mt-0.5">{app.job?.company} · {timeAgo(app.createdAt)}</p>
+                                                        <p className="text-sm font-bold text-white truncate leading-snug">{app.job?.title}</p>
+                                                        <p className="text-xs font-medium text-gray-400 truncate mt-0.5">{app.job?.company?.name} · {timeAgo(app.createdAt)}</p>
                                                     </div>
                                                     <span className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-[10px] font-bold tracking-wide shrink-0 ${st.cls}`}>
                                                         <span className={`w-1 h-1 rounded-full ${st.dot}`} />
@@ -541,7 +549,7 @@ export default function SeekerDashboard() {
                                                         </div>
                                                         <div className="min-w-0">
                                                             <p className="text-sm font-bold text-white truncate leading-snug">{job.role}</p>
-                                                            <p className="text-xs font-medium text-gray-400 truncate mt-0.5">{job.company} · {job.location || "Remote"}</p>
+                                                            <p className="text-xs font-medium text-gray-400 truncate mt-0.5">{job.company?.name} · {job.location || "Remote"}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all">
@@ -580,18 +588,18 @@ export default function SeekerDashboard() {
                             applications.map((app) => {
                                 const st = STATUS_MAP[app.status] || STATUS_MAP.pending;
                                 const StatusIcon = st.icon;
-                                const brandStyle = getBrandStyle(app.job?.company || "?");
+                                const brandStyle = getBrandStyle(app.job?.company?.name || "?");
                                 return (
                                     <div key={app._id || app.id} className="bg-gray-900 border border-white/5 hover:border-white/10 rounded-2xl p-5 shadow-xl transition-all duration-200">
                                         <div className="flex items-start gap-4">
                                             <div className={`w-11 h-11 bg-gradient-to-br ${brandStyle} rounded-2xl flex items-center justify-center text-white text-base font-black shrink-0 shadow-lg`}>
-                                                {(app.job?.company || "?")[0].toUpperCase()}
+                                                {(app.job?.company?.name || "?")[0].toUpperCase()}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-start justify-between gap-4 flex-wrap">
                                                     <div>
-                                                        <h4 className="text-base font-bold text-white tracking-tight leading-snug">{app.job?.role}</h4>
-                                                        <p className="text-xs font-semibold text-gray-400 mt-0.5">{app.job?.company}</p>
+                                                        <h4 className="text-base font-bold text-white tracking-tight leading-snug">{app.job?.title}</h4>
+                                                        <p className="text-xs font-semibold text-gray-400 mt-0.5">{app.job?.company?.name}</p>
                                                     </div>
                                                     <span className={`flex items-center gap-1.5 px-3 py-1 rounded-xl border text-xs font-bold tracking-wide ${st.cls} shadow-sm`}>
                                                         <span className={`w-1.5 h-1.5 rounded-full ${st.dot}`} />
@@ -599,7 +607,7 @@ export default function SeekerDashboard() {
                                                         {st.label}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-4 text-xs text-gray-500 font-medium">
                                                     {app.job?.location && <span className="flex items-center gap-1.5"><MapPin size={13} className="text-violet-400" />{app.job.location}</span>}
                                                     {app.job?.salary && <span className="flex items-center gap-1.5"><Wallet size={13} />{app.job.salary}</span>}
@@ -617,7 +625,7 @@ export default function SeekerDashboard() {
                                                 {app.status === "accepted" && (
                                                     <div className="mt-4 flex items-start gap-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3 text-xs text-emerald-400 font-medium shadow-inner animate-scaleIn">
                                                         <Award size={14} className="shrink-0 mt-0.5" />
-                                                        <span>Offer Document Dispatched! Check your configured email framework account to process sequential interview files from the {app.job?.company} human resource coordinator.</span>
+                                                        <span>Offer Document Dispatched! Check your configured email framework account to process sequential interview files from the {app.job?.company?.name} human resource coordinator.</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -643,25 +651,25 @@ export default function SeekerDashboard() {
                             </div>
                         ) : (
                             savedJobs.map((job) => {
-                                const brandStyle = getBrandStyle(job.company || "?");
+                                const brandStyle = getBrandStyle(job.company?.name || "?");
                                 return (
                                     <div key={job._id || job.id} className="bg-gray-900 border border-white/5 hover:border-white/10 rounded-2xl p-5 shadow-xl transition-all duration-200 group">
                                         <div className="flex items-start gap-4">
                                             <div className={`w-11 h-11 bg-gradient-to-br ${brandStyle} rounded-2xl flex items-center justify-center text-white text-base font-black shrink-0 shadow-lg`}>
-                                                {(job.company || "?")[0].toUpperCase()}
+                                                {(job.company?.name || "?")[0].toUpperCase()}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div>
                                                         <h4 className="text-base font-bold text-white tracking-tight leading-snug">{job.role}</h4>
-                                                        <p className="text-xs font-semibold text-gray-400 mt-0.5">{job.company}</p>
+                                                        <p className="text-xs font-semibold text-gray-400 mt-0.5">{job.company?.name}</p>
                                                     </div>
                                                     <button onClick={() => handleUnsave(job._id || job.id)}
                                                         className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-red-500/10 border border-white/5 rounded-xl text-xs font-semibold text-gray-500 hover:text-red-400 transition-all shrink-0 bg-white/[0.01]">
                                                         <Trash2 size={13} /> <span className="hidden sm:inline">Delete Bookmark</span>
                                                     </button>
                                                 </div>
-                                                
+
                                                 <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-4 text-xs text-gray-500 font-medium">
                                                     {job.location && <span className="flex items-center gap-1.5"><MapPin size={13} className="text-violet-400" />{job.location}</span>}
                                                     {job.salary && <span className="flex items-center gap-1.5"><Wallet size={13} />{job.salary}</span>}
