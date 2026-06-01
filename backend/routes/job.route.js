@@ -6,6 +6,7 @@ import {
   getJobById,
   getAdminJobs,
   deleteJob,
+  updateJob,
 } from "../controllers/job.controller.js";
 
 import isAuthenticated from "../middlewares/isAuthenticated.js";
@@ -40,6 +41,12 @@ router.get(
 router.get(
   "/:id",
   getJobById
+);
+
+router.put(
+  "/:id",
+  isAuthenticated,
+  updateJob
 );
 
 

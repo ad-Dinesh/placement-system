@@ -150,8 +150,10 @@ export default function Applicants() {
                         rel="noreferrer"
                         className="text-violet-400 underline"
                       >
+                        
                         View Resume
                       </a>
+                      
                     )}
                   </div>
 

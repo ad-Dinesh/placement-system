@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Briefcase, Trash2, MapPin, Users, Loader2, Eye } from "lucide-react";
+import { Briefcase, Trash2, MapPin, Users, Loader2, Eye, Edit } from "lucide-react";
 
 
 
@@ -10,7 +10,8 @@ export default function RecruiterJobs() {
   const [postedJobs, setPostedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null); // Track which job is being deleted
-
+  const [editingJob, setEditingJob] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
   // Wrapped in useCallback to prevent recreating the function on every render
   const fetchJobs = useCallback(async (abortController) => {
     try {
@@ -35,6 +36,47 @@ export default function RecruiterJobs() {
       setLoading(false);
     }
   }, []);
+  const handleUpdateJob = async () => {
+    try {
+      const token = localStorage.getItem("jwt_token");
+
+      const res = await fetch(
+        `http://localhost:8000/api/v1/jobs/${editingJob._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: editTitle,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
+
+      alert("Job Updated");
+
+      setPostedJobs((prev) =>
+        prev.map((job) =>
+          job._id === editingJob._id
+            ? { ...job, title: editTitle }
+            : job
+        )
+      );
+
+      setEditingJob(null);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleDropJob = async (id) => {
     // Double confirmation to prevent accidental clicks
@@ -79,6 +121,9 @@ export default function RecruiterJobs() {
       </div>
     );
   }
+
+
+
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6 sm:p-10 font-sans antialiased">
@@ -150,13 +195,47 @@ export default function RecruiterJobs() {
                     </div>
                   </div>
 
+                  {editingJob && (
+                    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+                      <div className="bg-gray-900 p-6 rounded-xl w-[400px]">
+                        <h2 className="text-xl font-bold mb-4">
+                          Edit Job
+                        </h2>
+
+                        <input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700"
+                        />
+
+                        <div className="flex gap-3 mt-4">
+                          <button
+                            onClick={handleUpdateJob}
+                            className="px-4 py-2 bg-violet-600 rounded-lg"
+                          >
+                            Save
+                          </button>
+
+                          <button
+                            onClick={() => setEditingJob(null)}
+                            className="px-4 py-2 bg-gray-700 rounded-lg"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Actions Section */}
                   <button
-                    onClick={() => navigate(`/recruiter/jobs/${job._id}/applicants`)}
-                    title="View Applicants"
-                    className="p-2.5 border rounded-xl bg-white/[0.01] border-white/10 hover:border-violet-500/30 text-gray-400 hover:text-violet-400"
+                    onClick={() => {
+                      setEditingJob(job);
+                      setEditTitle(job.title);
+                    }}
+                    className="p-2.5 border rounded-xl bg-white/[0.01] border-white/10 hover:border-blue-500/30 text-gray-400 hover:text-blue-400"
                   >
-                    <Eye size={14} />
+                    <Edit size={14} />
                   </button>
                   <div className="flex items-center gap-2 self-end sm:self-center border-t border-white/[0.03] sm:border-0 pt-3 sm:pt-0 w-full sm:w-auto justify-end">
                     <button
@@ -183,5 +262,6 @@ export default function RecruiterJobs() {
         </div>
       </div>
     </div>
+
   );
 }
