@@ -48,44 +48,44 @@ export default function Applicants() {
   };
 
   const handleDecision = async (id, decision) => {
-  try {
-    const token = localStorage.getItem("jwt_token");
+    try {
+      const token = localStorage.getItem("jwt_token");
 
-    const res = await fetch(
-      `http://localhost:8000/api/v1/applications/status/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          status: decision,
-        }),
+      const res = await fetch(
+        `http://localhost:8000/api/v1/applications/status/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            status: decision,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Failed to update status");
+        return;
       }
-    );
 
-    const data = await res.json();
+      setCandidates((prev) =>
+        prev.map((c) =>
+          c._id === id
+            ? { ...c, status: decision }
+            : c
+        )
+      );
 
-    if (!res.ok) {
-      alert(data.message || "Failed to update status");
-      return;
+      alert(`Candidate ${decision}`);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
     }
-
-    setCandidates((prev) =>
-      prev.map((c) =>
-        c._id === id
-          ? { ...c, status: decision }
-          : c
-      )
-    );
-
-    alert(`Candidate ${decision}`);
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6">
@@ -144,17 +144,14 @@ export default function Applicants() {
                       </div>
                     )}
 
-                    {cand.applicant?.profile?.resume && (
-                      <a
-                        href={cand.applicant.profile.resume}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-violet-400 underline"
-                      >
-                        
-                        View Resume
-                      </a>
-                      
+                    {cand.applicant?.profile?.resume ? (
+                      <span className="text-green-400">
+                        Resume Uploaded
+                      </span>
+                    ) : (
+                      <span className="text-red-400">
+                        No Resume
+                      </span>
                     )}
                   </div>
 
