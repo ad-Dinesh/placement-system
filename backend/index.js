@@ -43,7 +43,7 @@ const PORT = process.env.PORT || 8000;
 
 
 // API Routes
-app.use("/api/v1/user", userRoute);
+app.use("/api/v1/users", userRoute);
 
 app.use("/api/v1/companies", companyRoute);
 

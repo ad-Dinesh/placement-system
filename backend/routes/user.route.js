@@ -9,6 +9,8 @@ import {
 } from "../controllers/user.controller.js";
 
 import isAuthenticated from "../middlewares/isAuthenticated.js";
+import { singleUpload } from "../middlewares/multer.js";
+
 
 const router = express.Router();
 
@@ -28,9 +30,19 @@ router.get("/logout", logout);
 // Get Profile
 router.get("/profile", isAuthenticated, getProfile);
 
+router.put(
+  "/profile/update",
+  isAuthenticated,
+  singleUpload,
+  updateProfile
+);
 
-// Update Profile
-router.put("/profile/update", isAuthenticated, updateProfile);
+router.post(
+  "/resume",
+  isAuthenticated,
+  singleUpload,
+  updateProfile
+);
 
 
 export default router;

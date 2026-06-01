@@ -74,7 +74,7 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     try {
-      const res = await fetch(`${BASE_URL}/api/v1/user/login`, {
+      const res = await fetch(`${BASE_URL}/api/v1/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -109,7 +109,7 @@ export function AuthProvider({ children }) {
   const signup = useCallback(async (name, email, password, role) => {
   try {
 
-    const res = await fetch(`${BASE_URL}/api/v1/user/signup`, {
+    const res = await fetch(`${BASE_URL}/api/v1/users/signup`, {
       method: "POST",
 
       headers: {

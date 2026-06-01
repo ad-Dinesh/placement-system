@@ -103,7 +103,7 @@ console.log("LOGIN FUNCTION STARTED");
     try {
 
       const res = await fetch(
-  "http://localhost:8000/api/v1/user/login",
+  "http://localhost:8000/api/v1/users/login",
   {
     method: "POST",
     headers: {
@@ -185,7 +185,7 @@ return {
     try {
 
       const res = await fetch(
-  "http://localhost:8000/api/v1/user/signup",
+  "http://localhost:8000/api/v1/users/signup",
   {
     method: "POST",
     headers: {

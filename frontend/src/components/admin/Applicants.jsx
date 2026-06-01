@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -36,7 +37,7 @@ export default function Applicants() {
 
       const data = await res.json();
 
-      console.log(data);
+      console.log(data.applications[0]);
 
       setCandidates(data.applications || []);
     } catch (error) {

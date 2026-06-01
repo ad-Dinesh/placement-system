@@ -223,7 +223,7 @@ export default function SeekerDashboard() {
 
                 // PROFILE API
                 const profRes = await fetch(
-                    "http://localhost:8000/api/v1/user/profile",
+                    "http://localhost:8000/api/v1/users/profile",
                     { headers }
                 );
 
@@ -280,28 +280,48 @@ export default function SeekerDashboard() {
     }, []);
 
     const handleResumeUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        setResumeLoading(true);
-        setError("");
-        try {
-            const token = localStorage.getItem("jwt_token");
-            const fd = new FormData();
-            fd.append("resume", file);
-            const res = await fetch(`${API_BASE}api/v1/users/resume`, {
-                method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
-                body: fd,
-            });
-            if (!res.ok) throw new Error("Upload aborted by core server");
-            const data = await res.json();
-            setProfile((p) => ({ ...p, resumeUrl: data.resumeUrl }));
-        } catch {
-            setError("Resume pipeline error: File system upload rejected.");
-        } finally {
-            setResumeLoading(false);
-        }
-    };
+  const file = e.target.files[0];
+
+  if (!file) return;
+
+  try {
+    const token = localStorage.getItem("jwt_token");
+
+    const fd = new FormData();
+    fd.append("file", file);
+
+    console.log("Uploading...");
+    console.log("File =>", file);
+    console.log("Token =>", token);
+
+    const res = await fetch(
+      "http://localhost:8000/api/v1/users/resume",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: fd,
+      }
+    );
+
+    console.log("Status =>", res.status);
+
+    const data = await res.json();
+
+    console.log("Response =>", data);
+
+    if (!res.ok) {
+      alert(data.message || "Upload failed");
+      return;
+    }
+
+    alert("Resume uploaded successfully");
+  } catch (error) {
+    console.error(error);
+    alert("Upload error");
+  }
+};
 
     const handleUnsave = async (jobId) => {
         try {

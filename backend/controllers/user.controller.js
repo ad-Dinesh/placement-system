@@ -198,11 +198,15 @@ export const getProfile = async (req, res) => {
 
 // ================= UPDATE PROFILE =================
 export const updateProfile = async (req, res) => {
+   console.log("BODY =>", req.body);
+  console.log("FILE =>", req.file);
   try {
 
     const { fullname, bio, skills } = req.body;
 
     const user = await User.findById(req.userId);
+
+  
 
     if (!user) {
       return res.status(404).json({
@@ -219,6 +223,11 @@ export const updateProfile = async (req, res) => {
     if (!user.profile) {
       user.profile = {};
     }
+
+    if(req.file) {
+  user.profile.resumeOriginalName = req.file.originalname;
+  user.profile.resume = "uploaded";
+}
 
     if (bio) {
       user.profile.bio = bio;
@@ -243,8 +252,11 @@ export const updateProfile = async (req, res) => {
 
     console.error("UpdateProfile Error:", error);
 
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    return res.status(200).json({
+  success: true,
+  message: "Profile updated successfully",
+  resumeUrl: updatedUser.profile.resume,
+  user: updatedUser,
+});
   }
 };
