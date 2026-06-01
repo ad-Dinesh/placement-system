@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { Briefcase, Trash2, MapPin, Users, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Briefcase, Trash2, MapPin, Users, Loader2, Eye } from "lucide-react";
+
+
+
 
 export default function RecruiterJobs() {
+  const navigate = useNavigate();
   const [postedJobs, setPostedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null); // Track which job is being deleted
@@ -48,7 +53,7 @@ export default function RecruiterJobs() {
 
       const data = await res.json();
       alert(data.message || "Job deleted successfully");
-      
+
       // Refresh list without showing the full page loading spinner
       fetchJobs();
     } catch (error) {
@@ -78,7 +83,7 @@ export default function RecruiterJobs() {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-6 sm:p-10 font-sans antialiased">
       <div className="max-w-5xl mx-auto space-y-8">
-        
+
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -112,7 +117,7 @@ export default function RecruiterJobs() {
           ) : (
             postedJobs.map((job) => {
               const isDeleting = deletingId === job._id;
-              
+
               return (
                 <div
                   key={job._id}
@@ -146,14 +151,21 @@ export default function RecruiterJobs() {
                   </div>
 
                   {/* Actions Section */}
+                  <button
+                    onClick={() => navigate(`/recruiter/jobs/${job._id}/applicants`)}
+                    title="View Applicants"
+                    className="p-2.5 border rounded-xl bg-white/[0.01] border-white/10 hover:border-violet-500/30 text-gray-400 hover:text-violet-400"
+                  >
+                    <Eye size={14} />
+                  </button>
                   <div className="flex items-center gap-2 self-end sm:self-center border-t border-white/[0.03] sm:border-0 pt-3 sm:pt-0 w-full sm:w-auto justify-end">
                     <button
                       onClick={() => handleDropJob(job._id)}
                       disabled={isDeleting}
                       title="Delete Job"
                       className={`p-2.5 border rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center
-                        ${isDeleting 
-                          ? "bg-gray-900 border-white/5 text-gray-600 cursor-not-allowed" 
+                        ${isDeleting
+                          ? "bg-gray-900 border-white/5 text-gray-600 cursor-not-allowed"
                           : "bg-white/[0.01] border-white/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 hover:bg-red-500/5"
                         }`}
                     >
