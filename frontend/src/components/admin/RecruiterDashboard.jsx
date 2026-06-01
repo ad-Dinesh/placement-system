@@ -144,7 +144,7 @@ export default function RecruiterDashboard() {
   useEffect(() => {
     (async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("jwt_token");
         const h = { Authorization: `Bearer ${token}` };
 
         const [statsRes, jobsRes, appsRes, profileRes] = await Promise.all([

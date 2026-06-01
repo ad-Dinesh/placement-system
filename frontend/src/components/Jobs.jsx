@@ -46,7 +46,7 @@ function ApplyModal({ job, onClose, onSuccess }) {
     setSubmitting(true);
     setError("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("jwt_token");
       const formData = new FormData();
       formData.append("jobId",       job.id);
       formData.append("resume",      resumeFile);
