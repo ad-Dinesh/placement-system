@@ -1,4 +1,4 @@
-import Application from "../models/application.model.js";
+import Application from "../models/Application.model.js";
 import Job from "../models/job.model.js";
 
 // ================= APPLY TO JOB =================
