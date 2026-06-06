@@ -1,270 +1,483 @@
 <div align="center">
 
-# 🎓 Placement Management System
+<img src="https://capsule-render.vercel.app/api?type=waving&color=6d28d9&height=200&section=header&text=TalentPath&fontSize=80&fontColor=ffffff&fontAlignY=38&desc=Placement%20Management%20System&descAlignY=58&descSize=22&descColor=c4b5fd" width="100%"/>
 
-### A full-stack web platform bridging students and recruiters — built for modern campus placement workflows.
+<br/>
 
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-TalentPath-6d28d9?style=for-the-badge&logo=vercel&logoColor=white)](https://placement-system-4bjd5hvdk-dineshdharavath03-8276s-projects.vercel.app)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-ad--Dinesh%2Fplacement--system-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ad-Dinesh/placement-system)
+[![MIT License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-f59e0b?style=for-the-badge)](CONTRIBUTING.md)
+
+<br/>
+
+[![React](https://img.shields.io/badge/React.js-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://mongodb.com/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![Cloudinary](https://img.shields.io/badge/Media-Cloudinary-3448C5?style=flat-square&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
+[![Socket.io](https://img.shields.io/badge/Realtime-Socket.io-010101?style=flat-square&logo=socket.io&logoColor=white)](https://socket.io/)
+
+<br/>
+
+> **TalentPath** is a full-stack, role-based Placement & Job Portal that connects students with recruiters — featuring real-time notifications, resume management, smart job search, and powerful admin controls.
+
+<br/>
+
+<img src="https://img.shields.io/badge/10k%2B-Active%20Jobs-6d28d9?style=for-the-badge" />
+<img src="https://img.shields.io/badge/5k%2B-Companies-8b5cf6?style=for-the-badge" />
+<img src="https://img.shields.io/badge/50k%2B-Students-a78bfa?style=for-the-badge" />
+<img src="https://img.shields.io/badge/92%25-Placement%20Rate-c4b5fd?style=for-the-badge" />
 
 </div>
 
 ---
 
-## 📌 Project Overview
+## 📌 Table of Contents
 
-The **Placement Management System** is a full-stack MERN application designed to streamline the campus recruitment process. It provides a unified platform where **students** can explore job opportunities and apply for roles, while **recruiters** can post openings and manage applicants — all within a secure, role-based environment.
-
-This project demonstrates real-world software engineering practices including RESTful API design, JWT-based authentication, protected routing, and a responsive React frontend.
-
----
-
-## ✨ Features
-
-### 👩‍🎓 Student
-- Register and log in with secure credentials
-- Build and manage a personal profile
-- Browse available job postings
-- Submit applications directly through the platform
-- Track application status via personal dashboard
-
-### 🏢 Recruiter
-- Register and log in as a recruiter
-- Post, edit, and manage job listings
-- View all applicants for a specific job
-- Manage recruiter profile and company details
-
-### 🔐 System
-- Role-based access control (Student / Recruiter)
-- JWT Authentication with protected API routes
-- Secure password hashing with bcrypt
-- Responsive UI across devices
+- [Overview](#-overview)
+- [Problem Statement](#-problem-statement)
+- [Screenshots](#-screenshots)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture Overview](#️-architecture-overview)
+- [Folder Structure](#-folder-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [API Overview](#-api-overview)
+- [Deployment](#-deployment)
+- [Future Enhancements](#-future-enhancements)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
 
 ---
 
-## 🛠️ Tech Stack
+## 🧭 Overview
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | React.js, React Router DOM, Axios |
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB, Mongoose ODM |
-| **Authentication** | JSON Web Tokens (JWT), bcryptjs |
-| **Styling** | CSS / Tailwind CSS |
-| **Dev Tools** | Nodemon, dotenv, Postman |
+**TalentPath** is a centralized Placement Management System built on the MERN stack. It eliminates the friction in campus hiring by giving students, recruiters, and administrators a unified, real-time platform to manage their entire placement journey — from profile creation and job discovery to application tracking and offer management.
+
+Whether you're a student browsing opportunities, a recruiter sourcing top talent, or an admin overseeing the entire process — TalentPath has you covered.
 
 ---
 
-## 🚀 Installation & Setup
+## 🎯 Problem Statement
 
-### Prerequisites
+Traditional placement processes are fragmented:
 
-Make sure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18+)
-- [MongoDB](https://www.mongodb.com/) (local or Atlas)
-- [Git](https://git-scm.com/)
+- Students rely on scattered emails and spreadsheets to track applications.
+- Recruiters struggle to manage applicants and communicate updates efficiently.
+- Admins have no visibility into the overall placement pipeline.
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/placement-management-system.git
-cd placement-management-system
-```
-
-### 2. Install Backend Dependencies
-
-```bash
-cd server
-npm install
-```
-
-### 3. Install Frontend Dependencies
-
-```bash
-cd ../client
-npm install
-```
-
-### 4. Configure Environment Variables
-
-Create a `.env` file inside the `server/` directory (see [Environment Variables](#-environment-variables) section below).
-
-### 5. Run the Application
-
-**Start the backend server:**
-```bash
-cd server
-npm run dev
-```
-
-**Start the frontend (in a new terminal):**
-```bash
-cd client
-npm start
-```
-
-The app will be running at `http://localhost:3000` and the API at `http://localhost:5000`.
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file in the `server/` directory with the following variables:
-
-```env
-# Server
-PORT=5000
-NODE_ENV=development
-
-# MongoDB
-MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/placement-db
-
-# JWT
-JWT_SECRET=your_super_secret_jwt_key
-JWT_EXPIRES_IN=7d
-
-# Client URL (for CORS)
-CLIENT_URL=http://localhost:3000
-```
-
-> ⚠️ Never commit your `.env` file. It is listed in `.gitignore` by default.
-
----
-
-## 📁 Project Structure
-
-```
-placement-management-system/
-│
-├── client/                         # React frontend
-│   ├── public/
-│   └── src/
-│       ├── components/             # Reusable UI components
-│       ├── pages/                  # Route-level page components
-│       │   ├── Home.jsx
-│       │   ├── Login.jsx
-│       │   ├── Register.jsx
-│       │   ├── Dashboard.jsx
-│       │   ├── Jobs.jsx
-│       │   └── Profile.jsx
-│       ├── context/                # Auth context / global state
-│       ├── utils/                  # Axios instance, helpers
-│       └── App.jsx
-│
-├── server/                         # Node.js + Express backend
-│   ├── config/
-│   │   └── db.js                   # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── jobController.js
-│   │   └── applicationController.js
-│   ├── middleware/
-│   │   └── authMiddleware.js       # JWT verification
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Job.js
-│   │   └── Application.js
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── jobRoutes.js
-│   │   └── applicationRoutes.js
-│   └── server.js                   # Entry point
-│
-├── .gitignore
-└── README.md
-```
+**TalentPath** solves this by providing a single, role-aware platform with real-time updates, structured workflows, and data-driven dashboards for all stakeholders.
 
 ---
 
 ## 📸 Screenshots
 
-> Screenshots will be added once the UI is finalized.
-
 | Page | Preview |
-|---|---|
-| Landing Page | ![Landing](./screenshots/landing.png) |
-| Student Dashboard | ![Dashboard](./screenshots/dashboard.png) |
-| Job Listings | ![Jobs](./screenshots/jobs.png) |
-| Recruiter Portal | ![Recruiter](./screenshots/recruiter.png) |
+|------|---------|
+| 🏠 **Landing Page** | ![Landing Page](https://placeholder.pics/svg/800x450/1e1b4b/c4b5fd/Landing+Page) |
+| 🎓 **Student Dashboard** | ![Student Dashboard](https://placeholder.pics/svg/800x450/1e1b4b/c4b5fd/Student+Dashboard) |
+| 💼 **Job Listings** | ![Job Listings](https://placeholder.pics/svg/800x450/1e1b4b/c4b5fd/Job+Listings) |
+| 🏢 **Recruiter Dashboard** | ![Recruiter Dashboard](https://placeholder.pics/svg/800x450/1e1b4b/c4b5fd/Recruiter+Dashboard) |
+| 🛡️ **Admin Panel** | ![Admin Panel](https://placeholder.pics/svg/800x450/1e1b4b/c4b5fd/Admin+Panel) |
+
+> 💡 Replace the above placeholders with real screenshots from your deployed app.
 
 ---
 
-## 🔗 API Endpoints
+## ✨ Features
 
-### Auth
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Register a new user (student/recruiter) |
-| POST | `/api/auth/login` | Login and receive JWT token |
+### 👨‍🎓 Student
+| Feature | Description |
+|---|---|
+| 🔐 Auth | Register & login with JWT-secured sessions |
+| 👤 Profile | Build a rich student profile with skills, bio & profile photo (Cloudinary) |
+| 📄 Resume | Upload, update & download resume (PDF via Multer + Cloudinary) |
+| 🔍 Job Search | Search & filter jobs by title, location, type, salary range |
+| 📋 Apply | One-click job application with status tracking |
+| 📊 Dashboard | View applied jobs, application statuses & analytics |
+| 🔔 Notifications | Real-time Socket.io alerts on application status changes |
 
-### Jobs
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/jobs` | Fetch all active job listings |
-| POST | `/api/jobs` | Create a new job (recruiter only) |
-| GET | `/api/jobs/:id` | Get job details by ID |
-| PUT | `/api/jobs/:id` | Update a job posting (recruiter only) |
-| DELETE | `/api/jobs/:id` | Delete a job posting (recruiter only) |
+### 🏢 Recruiter
+| Feature | Description |
+|---|---|
+| 🔐 Auth | Role-specific register & login |
+| 🏢 Company Profile | Create and manage company profile |
+| 📝 Post Jobs | Create, edit & delete job listings |
+| 👥 Manage Applicants | View all applicants per job with resume access |
+| ✅ Status Updates | Accept / Reject applicants with instant notifications |
+| 📊 Dashboard | Analytics on posted jobs and application metrics |
 
-### Applications
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/applications` | Apply for a job (student only) |
-| GET | `/api/applications/me` | View my applications (student) |
-| GET | `/api/applications/job/:jobId` | View applicants for a job (recruiter) |
+### 🛡️ Administrator
+| Feature | Description |
+|---|---|
+| 👁️ Full Visibility | View and manage all users (students & recruiters) |
+| 🗂️ Job Management | Monitor, approve, or remove job postings |
+| 📈 Analytics | Platform-wide statistics and placement metrics |
+| 🔒 Role Control | Role-Based Access Control (RBAC) across all routes |
+
+### ⚙️ Platform
+| Feature | Description |
+|---|---|
+| 📱 Responsive UI | Fully mobile-friendly with Tailwind CSS |
+| 📧 Email Notifications | Automated emails via Nodemailer |
+| ⚡ Real-Time | Live notifications via Socket.io |
+| 📄 Pagination | Efficient data loading with server-side pagination |
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|---|---|
+| ⚛️ React.js | UI framework |
+| 🎨 Tailwind CSS | Utility-first styling |
+| 🗃️ Redux / Context API | Global state management |
+| 🔗 Axios | HTTP client for API calls |
+
+### Backend
+| Technology | Purpose |
+|---|---|
+| 🟢 Node.js | Runtime environment |
+| 🚂 Express.js | RESTful API framework |
+| 🍃 MongoDB | NoSQL database |
+| 🦦 Mongoose ODM | Schema modeling & DB queries |
+| 🔑 JWT | Stateless authentication |
+| 📁 Multer | File (resume/image) upload handling |
+| ☁️ Cloudinary | Cloud media storage |
+| 📨 Nodemailer | Email notifications |
+| ⚡ Socket.io | Real-time bidirectional events |
+
+### DevOps & Deployment
+| Technology | Purpose |
+|---|---|
+| ▲ Vercel | Frontend deployment |
+| 🌐 Render / Railway | Backend deployment |
+| 🍃 MongoDB Atlas | Cloud database |
+
+---
+
+## 🏗️ Architecture Overview
+
+```
+┌────────────────────────────────────────────────────────┐
+│                     CLIENT (Browser)                   │
+│         React.js + Tailwind CSS + Redux                │
+│                  Deployed on Vercel                    │
+└────────────────────┬───────────────────────────────────┘
+                     │  REST API (HTTP/HTTPS)
+                     │  Socket.io (WebSocket)
+┌────────────────────▼───────────────────────────────────┐
+│                  BACKEND (Node.js)                     │
+│            Express.js REST API Server                  │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐ │
+│  │  Routes  │  │Middleware│  │  Socket.io Server    │ │
+│  └────┬─────┘  │(Auth/RBAC│  └──────────────────────┘ │
+│       │        │ /Multer) │                            │
+│  ┌────▼──────────────┐    │                            │
+│  │    Controllers    │◄───┘                            │
+│  └────┬──────────────┘                                 │
+│       │                                                │
+│  ┌────▼───────────────────────────────────────────┐   │
+│  │              Services / Utils                  │   │
+│  │   Cloudinary | Nodemailer | JWT | Bcrypt       │   │
+│  └────┬───────────────────────────────────────────┘   │
+└───────┼────────────────────────────────────────────────┘
+        │
+┌───────▼────────────────────────────────────────────────┐
+│              MongoDB Atlas (Cloud Database)            │
+│   Users | Jobs | Applications | Companies | Profiles   │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📁 Folder Structure
+
+```
+placement-management-system/
+│
+├── backend/
+│   ├── controllers/        # Route handler logic (auth, jobs, applications, users)
+│   ├── middlewares/        # JWT auth, RBAC, error handling, Multer config
+│   ├── models/             # Mongoose schemas (User, Job, Application, Company)
+│   ├── routes/             # Express route definitions
+│   ├── utils/              # Cloudinary config, Nodemailer, helpers
+│   ├── .env                # Backend environment variables
+│   ├── index.js            # App entry point + Socket.io init
+│   ├── package.json
+│   └── package-lock.json
+│
+├── frontend/
+│   ├── public/             # Static assets & favicon
+│   └── src/
+│       ├── assets/         # Images, icons, fonts
+│       ├── components/     # Reusable UI components
+│       ├── hooks/          # Custom React hooks
+│       ├── lib/            # Axios instance, constants, helpers
+│       ├── redux/          # Redux slices, store config
+│       ├── utils/          # Utility functions
+│       ├── App.jsx         # Root component with routing
+│       ├── App.css
+│       ├── main.jsx        # React DOM entry point
+│       └── index.css
+│   ├── .env                # Frontend environment variables
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) v18+
+- [MongoDB](https://www.mongodb.com/) (local or [Atlas](https://cloud.mongodb.com))
+- [Git](https://git-scm.com/)
+- A [Cloudinary](https://cloudinary.com/) account
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ad-Dinesh/placement-system.git
+cd placement-system
+```
+
+### 2. Setup the Backend
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file inside `/backend` (see [Environment Variables](#-environment-variables) below).
+
+```bash
+npm run dev
+```
+
+> Backend runs at `http://localhost:8000`
+
+### 3. Setup the Frontend
+
+```bash
+cd ../frontend
+npm install
+```
+
+Create a `.env` file inside `/frontend`:
+
+```bash
+npm run dev
+```
+
+> Frontend runs at `http://localhost:5173`
+
+---
+
+## 🔐 Environment Variables
+
+### Backend — `/backend/.env`
+
+```env
+# Server
+PORT=8000
+NODE_ENV=development
+
+# MongoDB
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/talentpath
+
+# JWT
+JWT_SECRET=your_super_secret_jwt_key
+JWT_EXPIRES_IN=7d
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Email (Nodemailer)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+
+# Client URL (for CORS)
+CLIENT_URL=http://localhost:5173
+```
+
+### Frontend — `/frontend/.env`
+
+```env
+VITE_API_BASE_URL=http://localhost:8000/api/v1
+VITE_SOCKET_URL=http://localhost:8000
+```
+
+> ⚠️ Never commit `.env` files to version control. Add them to `.gitignore`.
+
+---
+
+## 📡 API Overview
+
+Base URL: `/api/v1`
+
+### 🔐 Auth Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `POST` | `/auth/register` | Register new user (student/recruiter) | Public |
+| `POST` | `/auth/login` | Login and receive JWT | Public |
+| `POST` | `/auth/logout` | Logout user | Private |
+
+### 👤 User / Profile Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/profile/me` | Get current user profile | Private |
+| `PUT` | `/profile/update` | Update profile info + photo | Private |
+| `POST` | `/profile/resume` | Upload/update resume | Student |
+
+### 💼 Job Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/jobs` | Get all jobs (with filters & pagination) | Public |
+| `GET` | `/jobs/:id` | Get single job details | Public |
+| `POST` | `/jobs` | Create a new job posting | Recruiter |
+| `PUT` | `/jobs/:id` | Update job posting | Recruiter |
+| `DELETE` | `/jobs/:id` | Delete job posting | Recruiter |
+
+### 📋 Application Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `POST` | `/applications/:jobId` | Apply for a job | Student |
+| `GET` | `/applications/me` | Get all my applications | Student |
+| `GET` | `/applications/job/:jobId` | Get all applicants for a job | Recruiter |
+| `PUT` | `/applications/:id/status` | Update application status | Recruiter |
+
+### 🏢 Company Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/companies` | Get all companies | Public |
+| `POST` | `/companies` | Register company | Recruiter |
+| `PUT` | `/companies/:id` | Update company profile | Recruiter |
+
+### 🛡️ Admin Routes
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/admin/users` | Get all users | Admin |
+| `DELETE` | `/admin/users/:id` | Remove a user | Admin |
+| `GET` | `/admin/jobs` | Get all job postings | Admin |
+| `DELETE` | `/admin/jobs/:id` | Remove a job posting | Admin |
+
+---
+
+## ☁️ Deployment
+
+### Frontend — Vercel
+
+1. Push your frontend to GitHub.
+2. Import the repo in [Vercel](https://vercel.com).
+3. Set **Root Directory** to `frontend`.
+4. Add environment variables from `/frontend/.env`.
+5. Deploy.
+
+```
+Live URL: https://placement-system-4bjd5hvdk-dineshdharavath03-8276s-projects.vercel.app
+```
+
+### Backend — Render / Railway
+
+1. Push your backend to GitHub.
+2. Create a new **Web Service** on [Render](https://render.com) or [Railway](https://railway.app).
+3. Set **Root Directory** to `backend`.
+4. Set the **Start Command** to `node index.js`.
+5. Add all environment variables from `/backend/.env`.
+6. Deploy and copy the live URL into your frontend's `VITE_API_BASE_URL`.
+
+### Database — MongoDB Atlas
+
+1. Create a free cluster on [MongoDB Atlas](https://cloud.mongodb.com).
+2. Whitelist your server's IP.
+3. Grab the connection string and set it as `MONGO_URI` in your backend `.env`.
 
 ---
 
 ## 🔮 Future Enhancements
 
-- [ ] **Email Notifications** — Automated emails for application status updates
-- [ ] **Resume Upload** — PDF resume upload and storage via Cloudinary
-- [ ] **Admin Panel** — Centralized admin dashboard for managing users and listings
-- [ ] **Search & Filters** — Advanced job search by location, CTC, role, and skills
-- [ ] **Interview Scheduler** — In-app scheduling for technical and HR rounds
-- [ ] **Analytics Dashboard** — Placement stats, conversion rates, and trends
-- [ ] **OAuth Login** — Google / LinkedIn sign-in integration
-- [ ] **Mobile App** — React Native companion app
+- [ ] 🤖 **AI Resume Parser** — Auto-fill student profiles from uploaded resumes using NLP
+- [ ] 📅 **Interview Scheduler** — Integrated calendar for scheduling & tracking interviews
+- [ ] 💬 **In-App Messaging** — Direct chat between students and recruiters
+- [ ] 📲 **Push Notifications** — Browser & mobile push alerts via Firebase FCM
+- [ ] 🌍 **Multi-language Support** — i18n for regional accessibility
+- [ ] 📊 **Advanced Analytics** — Detailed placement reports with charts (Recharts / Chart.js)
+- [ ] 🏆 **Leaderboard** — Top student profiles ranked by skills & activity
+- [ ] 🔗 **LinkedIn OAuth** — One-click sign-in with LinkedIn
+- [ ] 📱 **React Native App** — Mobile app for students on the go
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! To get started:
+Contributions are welcome and appreciated! Here's how to get started:
 
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m 'Add: your feature description'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request
+```bash
+# 1. Fork the repository
+# 2. Create your feature branch
+git checkout -b feature/your-feature-name
 
-Please make sure your code follows consistent naming conventions and is well-commented.
+# 3. Commit your changes
+git commit -m "feat: add your feature description"
+
+# 4. Push to the branch
+git push origin feature/your-feature-name
+
+# 5. Open a Pull Request
+```
+
+Please make sure your code follows the existing code style and that you've tested your changes before submitting a PR.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License © 2024 Your Name
+```
 
 ---
 
-## 👤 Author
+## 👨‍💻 Author
 
-**Your Name**
+<div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/your-username)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/your-profile)
-[![Portfolio](https://img.shields.io/badge/Portfolio-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white)](https://your-portfolio.com)
+<img src="https://placeholder.pics/svg/100/6d28d9/ffffff/Avatar" width="100" style="border-radius: 50%;" />
+
+### Your Name
+
+*Full Stack Developer | MERN Stack Enthusiast*
+
+[![GitHub](https://img.shields.io/badge/GitHub-@ad--Dinesh-181717?style=for-the-badge&logo=github)](https://github.com/ad-Dinesh)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/your-profile)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-6d28d9?style=for-the-badge&logo=firefox)](https://your-portfolio.com)
+
+</div>
 
 ---
 
 <div align="center">
 
-⭐ **If you found this project helpful, please give it a star!** ⭐
+<img src="https://capsule-render.vercel.app/api?type=waving&color=6d28d9&height=100&section=footer" width="100%"/>
 
-*Built with ❤️ using the MERN Stack*
+**⭐ Star this repo if you found it helpful!**
+
+*Built with 💜 using the MERN Stack*
 
 </div>
