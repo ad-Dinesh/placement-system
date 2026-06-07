@@ -444,15 +444,7 @@ Please make sure your code follows the existing code style and that you've teste
 
 ---
 
-## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License © 2024 Your Name
-```
-
----
 
 ## 👨‍💻 Author
 
@@ -460,13 +452,13 @@ MIT License © 2024 Your Name
 
 <img src="https://placeholder.pics/svg/100/6d28d9/ffffff/Avatar" width="100" style="border-radius: 50%;" />
 
-### Your Name
+### Dinesh
 
 *Full Stack Developer | MERN Stack Enthusiast*
 
 [![GitHub](https://img.shields.io/badge/GitHub-@ad--Dinesh-181717?style=for-the-badge&logo=github)](https://github.com/ad-Dinesh)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/your-profile)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-6d28d9?style=for-the-badge&logo=firefox)](https://your-portfolio.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](www.linkedin.com/in/dinesh-dharavath-b176a2342)
+
 
 </div>
 
